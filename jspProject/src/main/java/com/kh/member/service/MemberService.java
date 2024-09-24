@@ -63,17 +63,19 @@ public class MemberService {
 		return result;
 	}
 
-	public Member updateMember(String userId, String phone, String email, String address, String interest) {
+	public Member updateMember(Member m) {
 		Connection conn = getConnection();
-		int result = new MemberDao().updateMember(conn, userId, phone, email, address, interest);
-		if(result > 0) {
+		int result = new MemberDao().updateMember(conn, m);
+		
+		Member updateMember = null;
+		if (result > 0) {
 			commit(conn);
+			
+			updateMember = new MemberDao().selectMember(conn, m.getUserId());
 		} else {
 			rollback(conn);
-			return null;
 		}
-		Member m = new MemberDao().selectMember(conn, userId);
-		close(conn);
-		return m;
+		
+		return updateMember;
 	}
 }

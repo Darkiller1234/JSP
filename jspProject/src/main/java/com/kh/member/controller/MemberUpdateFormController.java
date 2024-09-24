@@ -41,8 +41,13 @@ public class MemberUpdateFormController extends HttpServlet {
 		if(interestArr != null) {
 			interest = String.join(",", interestArr);
 		}
-		
-		Member updateMember = new MemberService().updateMember(userId, phone, email, address, interest);
+		Member m = new Member();
+		m.setUserId(userId);
+		m.setPhone(phone);
+		m.setEmail(email);
+		m.setAddress(address);
+		m.setInterest(interest);
+		Member updateMember = new MemberService().updateMember(m);
 		
 		if(updateMember == null) {
 			request.setAttribute("errorMsg", "정보 수정에 실패하였습니다.");
