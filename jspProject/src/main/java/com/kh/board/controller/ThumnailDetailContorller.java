@@ -1,26 +1,22 @@
 package com.kh.board.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import com.kh.board.model.vo.Board;
-import com.kh.board.service.BoardService;
-
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
- * Servlet implementation class ThumbnailListController
+ * Servlet implementation class ThumnailDetailContorller
  */
-public class ThumbnailListController extends HttpServlet {
+public class ThumnailDetailContorller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ThumbnailListController() {
+    public ThumnailDetailContorller() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,11 +25,8 @@ public class ThumbnailListController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Board> list = new BoardService().selectThumbnailList();
-		
-		request.setAttribute("list", list);
-		request.getRequestDispatcher("views/board/thumbnailListView.jsp").forward(request, response);
-	
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**

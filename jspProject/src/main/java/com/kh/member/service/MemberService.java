@@ -78,4 +78,10 @@ public class MemberService {
 		
 		return updateMember;
 	}
+
+	public int idCheck(String checkId) {
+		Connection conn = getConnection();
+		int result = new MemberDao().idCheck(conn, checkId);
+		return result;
+	}
 }

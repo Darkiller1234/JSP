@@ -15,21 +15,7 @@ public class Board {
 	public Board() {
 		super();
 	}
-
 	
-	
-	public String getTitleImg() {
-		return titleImg;
-	}
-
-
-
-	public void setTitleImg(String titleImg) {
-		this.titleImg = titleImg;
-	}
-
-
-
 	public Board(int boardNo, int boardType, String category, String boardTitle, String boardContent,
 			String boardWriter, int count, String createDate, String status, String titleImg) {
 		super();
@@ -45,8 +31,6 @@ public class Board {
 		this.titleImg = titleImg;
 	}
 
-
-
 	public Board(int boardNo, String category, String boardTitle, String boardContent, String boardWriter,
 			String createDate) {
 		super();
@@ -56,6 +40,15 @@ public class Board {
 		this.boardContent = boardContent;
 		this.boardWriter = boardWriter;
 		this.createDate = createDate;
+	}
+
+	
+	public String getTitleImg() {
+		return titleImg;
+	}
+
+	public void setTitleImg(String titleImg) {
+		this.titleImg = titleImg;
 	}
 
 	public int getBoardNo() {
@@ -130,8 +123,6 @@ public class Board {
 		this.status = status;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "Board [boardNo=" + boardNo + ", boardType=" + boardType + ", category=" + category + ", boardTitle="
@@ -139,10 +130,4 @@ public class Board {
 				+ ", createDate=" + createDate + ", status=" + status + ", titleImg=" + titleImg + "]";
 	}
 
-
-
-	
-
-
-	
 }

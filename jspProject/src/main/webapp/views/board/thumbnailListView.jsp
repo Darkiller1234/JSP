@@ -1,132 +1,81 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList, com.kh.board.model.vo.Board" %>
+<%
+	ArrayList<Board> list = (ArrayList<Board>)request.getAttribute("list");
+%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .outer{
+            background: black;
+            color: white;
+            width: 1000px;
+            margin: auto;
+            height: auto;
+            margin-top: 50px;
+        }
 
-<style>
-    .outer{
-        background: black;
-        color: white;
-        width: 1000px;
-        margin: auto;
-        margin-top: 50px;
-        padding: 10px 0 50px 0px;
-    }
+        .list-area{
+            max-width: 850px;
+            min-height: 500px;
+            margin: auto;
+        }
 
-    .outer table{
-        border: 1px solid white;
-        border-collapse: collapse;
-    }
-    .outer > table tr, .outer > table td{
-        border: 1px solid white;
-    }
-    .outer > form input, .outer > form textarea{
-        width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .outer img:hover{
-        cursor: pointer;
-        background: gray;
-    }
-</style>
-
+        .thumbnail{
+            display: inline-block;
+            border: 1px solid white;
+            padding: 12px;
+            margin: 14px;
+            width: 250px;
+            box-sizing: border-box;
+        }
+        .thumbnail:hover{
+            cursor: pointer;
+            opacity: 0.9;
+        }
+        .thumbnail p > span{
+            display: inline-block;
+            width: 220px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
+    <%@ include file="../common/menubar.jsp"%>
 
-    <%@ include file="../common/menubar.jsp" %>
     <div class="outer">
         <br>
-        <h2 align="center">사진게시글 작성하기</h2>
+        <h2 align="center">사진게시판</h2>
         <br>
+        <% if( loginUser != null ) { %>
+	        <div align="right" style="width: 850px; margin-bottom: 4px;">
+	        	<a href="<%=contextPath %>/enrollForm.th" class="btn btn-sm btn-secondary">글쓰기</a>
+	        </div>
+        <% } %>
 
-        <form action="<%=contextPath%>/insert.th" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="userName" value="<%=loginUser.getUserNo()%>">
-            <table border="1" align="center">         
-                <tr>
-                    <th width="100">제목</th>
-                    <td colspan="3">
-                        <input type="text" name="title" required>
-                    </td>
-                </tr>
-                <tr></tr>
-                    <th>내용</th>
-                    <td colspan="3">
-                        <textarea name="content" rows="5" style="resize: none;"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <th>대표이미지</th>
-                    <td colspan="3">
-                        <img id="title-img" width="250" height="170" onclick="chooseFile(1)" src="https://i.namu.wiki/i/gDPfQkxHtppOjq7uVlt0LBHqrmMM08gFBUZx0HfoiQlY3AypyMNCWZQXk6v1enbx9r0--mOrDGCo2NZF6-Z99l29AplFjCGeHJw7MTyBZQqZV_jhuIf2Jqawk9oXbUSZvKNcn5RP-APyHc7mpkdAXw.webp">
-                    </td>
-                </tr>
-                <tr>
-                    <th>상세이미지</th>
-                    <td><img id="content-img1" width="150px" height="120px" onclick="chooseFile(2)" src="https://i.namu.wiki/i/gDPfQkxHtppOjq7uVlt0LBHqrmMM08gFBUZx0HfoiQlY3AypyMNCWZQXk6v1enbx9r0--mOrDGCo2NZF6-Z99l29AplFjCGeHJw7MTyBZQqZV_jhuIf2Jqawk9oXbUSZvKNcn5RP-APyHc7mpkdAXw.webp"></td>
-                    <td><img id="content-img2" width="150px" height="120px" onclick="chooseFile(3)" src="https://i.namu.wiki/i/gDPfQkxHtppOjq7uVlt0LBHqrmMM08gFBUZx0HfoiQlY3AypyMNCWZQXk6v1enbx9r0--mOrDGCo2NZF6-Z99l29AplFjCGeHJw7MTyBZQqZV_jhuIf2Jqawk9oXbUSZvKNcn5RP-APyHc7mpkdAXw.webp"></td>
-                    <td><img id="content-img3" width="150px" height="120px" onclick="chooseFile(4)" src="https://i.namu.wiki/i/gDPfQkxHtppOjq7uVlt0LBHqrmMM08gFBUZx0HfoiQlY3AypyMNCWZQXk6v1enbx9r0--mOrDGCo2NZF6-Z99l29AplFjCGeHJw7MTyBZQqZV_jhuIf2Jqawk9oXbUSZvKNcn5RP-APyHc7mpkdAXw.webp"></td>
-                </tr>
-            </table>
-            
-            <div style="display: none;">
-                <input type="file" name="file1" id="file1" required onchange="loadImg(this, 1)">
-                <input type="file" name="file2" id="file2" onchange="loadImg(this, 2)">
-                <input type="file" name="file3" id="file3" onchange="loadImg(this, 3)">
-                <input type="file" name="file4" id="file4" onchange="loadImg(this, 4)">
-            </div>
-
-            <script>
-                function loadImg(_input, num){
-                    //_input.files[0]-> 선택된 파일이 담겨있다.
-                    //_input.files.legnth -> 1
-
-                    if(_input.files.length == 1){ //파일이 하나 선택됬다
-                        //파일을 읽어들일 객체생성
-                        const reader = new FileReader();
-
-                        //해당파일을 읽어들여 해당파일만의 고유한 url부여
-                        reader.readAsDataURL(_input.files[0])
-
-                        //파일읽어들이기를 완료했을 때 실행해주는 함수
-                        reader.onload = function(ev){
-                            console.log(ev.target.result);
-                            console.log(num);
-                            switch(num){
-                                case 1: document.getElementById("title-img").src = ev.target.result; break;
-                                case 2: document.querySelector("#content-img1").src = ev.target.result; break;
-                                case 3: $("#content-img2").attr("src", ev.target.result); break;
-                                case 4: $("#content-img3").attr("src", ev.target.result); break;
-                            }
-                        } 
-
-                    } else { //선택된 파일을 취소한 경우 -> 미리보기 지워준다.
-                        switch(num){
-                            case 1: document.getElementById("title-img").src = "https://i.namu.wiki/i/gDPfQkxHtppOjq7uVlt0LBHqrmMM08gFBUZx0HfoiQlY3AypyMNCWZQXk6v1enbx9r0--mOrDGCo2NZF6-Z99l29AplFjCGeHJw7MTyBZQqZV_jhuIf2Jqawk9oXbUSZvKNcn5RP-APyHc7mpkdAXw.webp"; break;
-                            case 2: document.querySelector("#content-img1").src = "https://i.namu.wiki/i/gDPfQkxHtppOjq7uVlt0LBHqrmMM08gFBUZx0HfoiQlY3AypyMNCWZQXk6v1enbx9r0--mOrDGCo2NZF6-Z99l29AplFjCGeHJw7MTyBZQqZV_jhuIf2Jqawk9oXbUSZvKNcn5RP-APyHc7mpkdAXw.webp"; break;
-                            case 3: $("#content-img2").attr("src", "https://i.namu.wiki/i/gDPfQkxHtppOjq7uVlt0LBHqrmMM08gFBUZx0HfoiQlY3AypyMNCWZQXk6v1enbx9r0--mOrDGCo2NZF6-Z99l29AplFjCGeHJw7MTyBZQqZV_jhuIf2Jqawk9oXbUSZvKNcn5RP-APyHc7mpkdAXw.webp"); break;
-                            case 4: $("#content-img3").attr("src", "https://i.namu.wiki/i/gDPfQkxHtppOjq7uVlt0LBHqrmMM08gFBUZx0HfoiQlY3AypyMNCWZQXk6v1enbx9r0--mOrDGCo2NZF6-Z99l29AplFjCGeHJw7MTyBZQqZV_jhuIf2Jqawk9oXbUSZvKNcn5RP-APyHc7mpkdAXw.webp"); break;
-                        }
-                    }
-                }
-
-                function chooseFile(num){
-                    const fileInput = document.querySelector("#file" + num);
-                    fileInput.click();
-                }
-            </script>
-
-            <br>
-            
-            <div align="center">
-                <button type="submit">작성하기</button>
-                <button type="reset">취소하기</button>
-            </div>
-
-        </form>
+        <div class="list-area">
+        	<% for(Board b : list) { %>
+	            <div class="thumbnail" align="center" onclick = "clickBoard('<%=b.getBoardNo()%>')">
+	                <img src="<%=contextPath %>/<%=b.getTitleImg() %>" width="200px" height="150px" alt="썸네일이미지">
+	                <p>
+	                    <span>No. <%=b.getBoardNo() %> <%=b.getBoardTitle() %></span><br>
+	                    조회수 : <%=b.getCount() %>
+	                </p>
+	            </div>
+            <% } %>
+        </div>
     </div>
+    <!-- jsp/detail.th -->
+    <script>
+    	function clickBoard(bno){
+    		location.href = "<%=contextPath%>/detail.th?bno=" + bno;
+    	}
+    </script>
 </body>
 </html>

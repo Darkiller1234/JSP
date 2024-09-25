@@ -3,6 +3,7 @@ package com.kh.board.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.kh.board.model.vo.Attachment;
 import com.kh.board.model.vo.Board;
 import com.kh.board.service.BoardService;
 
@@ -12,15 +13,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ThumbnailListController
+ * Servlet implementation class ThumbnailDetailController
  */
-public class ThumbnailListController extends HttpServlet {
+public class ThumbnailDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ThumbnailListController() {
+    public ThumbnailDetailController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,11 +30,20 @@ public class ThumbnailListController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Board> list = new BoardService().selectThumbnailList();
-		
-		request.setAttribute("list", list);
-		request.getRequestDispatcher("views/board/thumbnailListView.jsp").forward(request, response);
-	
+		int boardNo = Integer.parseInt(request.getParameter("bno"));
+		System.out.println(boardNo);
+		Board b = new BoardService().increaseCount(boardNo);
+		System.out.println(b);
+		if(b != null) {
+			ArrayList<Attachment> list = new BoardService().selectAttachmentList(boardNo);
+			request.setAttribute("b", b);
+			request.setAttribute("list", list);
+			
+			request.getRequestDispatcher("views/board/thumbnailDetailView.jsp").forward(request, response);
+		} else {
+			request.setAttribute("errorMsg", "사진 게시글 조회 실패");
+			request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
+		}
 	}
 
 	/**
